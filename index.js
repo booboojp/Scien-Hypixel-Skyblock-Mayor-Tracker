@@ -1,5 +1,6 @@
 const { Client, Collection, Events, EmbedBuilder, GatewayIntentBits  } = require('discord.js');
 const axios = require('axios');
+const chalk = require('ansis');
 require('dotenv').config();
 
 const client = new Client({
@@ -10,7 +11,6 @@ const client = new Client({
 
 
 client.once('ready', () => {
-    console.log('The Bot is ready!');
 
     const sendDailyMessage = async () => {
         try {
@@ -51,22 +51,25 @@ client.once('ready', () => {
                 return;
             }
 
-            channel.send({ content: `<@386205272005410816>`, embeds: [embed] });
+            channel.send({ content: `<@${process.env.USER_ID_TO_PING}>`, embeds: [embed] });
 
         } catch (error) {
             console.error(error);
         }
     }
-    setInterval(sendDailyMessage, 172800000); // 172800000 = 2 Days, 30000 = 30 Seconds or 3 Seconds
+    setInterval(sendDailyMessage, 30000); // 172800000 = 2 Days, 30000 = 30 Seconds or 3 Seconds
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN);
 client.on('debug', information => {
-    console.log(`Debug Message: ${information}`);
+    console.log(`${chalk.green("Debug Message")}: ${information}`);
 });
 client.on('warn', information => {
-    console.log(`Warning Message: ${information}`);
+    console.log(`${chalk.yellowBright("Warning Message")}: ${information}`);
 });
+client.on('error', information => {
+    console.log(`${chalk.redBright("Error Message")}: ${information}`);
+})
 client.on('rateLimit', information => {
     console.log(`Rate Limit was hit ${information.time} ms ago.`)
 });
@@ -74,5 +77,5 @@ client.on('ready', () => {
     const channelID = process.env.CHANNEL_ID;
     const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID);
     const channel = guild.channels.cache.get(channelID);
-    channel.send('Bot is Online');
+    console.log(`${chalk.bold.black.bgMagentaBright('Scienti')}\n${chalk.bold('Status')}: Online\n${chalk.bold('ID')}: ${client.user.id}\n${chalk.bold('Discord Username')}: ${client.user.username}\n${chalk.bold('Avatar URL')}: ${client.user.avatarURL()}\n${chalk.bold('Presence')}: ${client.user.presence.status}\n${chalk.bold('Activity')}: ${JSON.stringify(client.user.presence.activities)}`);
 });
