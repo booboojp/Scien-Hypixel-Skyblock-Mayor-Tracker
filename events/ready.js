@@ -31,6 +31,27 @@ module.exports = {
     
                 const mayorPerks = data.mayor && data.mayor.perks ? data.mayor.perks.map(perk => `- **${perk.name}**: ${perk.description}`).join('\n') : '';
     
+
+                function getRendersFromName(name) {
+                    const images = {
+                        'Aatrox': 'https://static.wikia.nocookie.net/hypixel-skyblock/images/a/a5/Aatrox.png',
+                        'Cole': 'https://static.wikia.nocookie.net/hypixel-skyblock/images/b/b8/Cole.png',
+                        'Diana': 'https://static.wikia.nocookie.net/hypixel-skyblock/images/5/5f/Diana.png',    
+                        'Diaz': 'https://static.wikia.nocookie.net/hypixel-skyblock/images/d/da/Diaz.png',
+                        'Finnegan': 'https://static.wikia.nocookie.net/hypixel-skyblock/images/8/85/Finnegan.png',
+                        'Foxy': 'https://static.wikia.nocookie.net/hypixel-skyblock/images/9/90/Foxy.png',
+                        'Marina': 'https://static.wikia.nocookie.net/hypixel-skyblock/images/9/9d/Marina.png',
+                        'Paul': 'https://static.wikia.nocookie.net/hypixel-skyblock/images/0/00/Paul.png/',
+                        'Derpy': 'https://static.wikia.nocookie.net/hypixel-skyblock/images/d/de/Derpy.png/revision/latest?cb=20210802153205&format=original',
+                        'Jerry': 'https://static.wikia.nocookie.net/hypixel-skyblock/images/5/58/Villager.png',
+                        'Scorpius': 'https://static.wikia.nocookie.net/hypixel-skyblock/images/a/af/Scorpius.png',
+                    }
+                    return images[name] || images['Unknown'];
+                }
+
+                const image = getRendersFromName(data.mayor.name)
+
+
                 const embed = new EmbedBuilder()
                     .setTitle(`Election Year (${data.mayor.election.year}) Data:`)
                     .setDescription(`Mayor: **${data.mayor.name || 'Unknown'}**`)
@@ -38,6 +59,7 @@ module.exports = {
                         { name: 'Perks', value: mayorPerks },
                         { name: 'Candidates', value: candidatesList }
                     )
+                    .setThumbnail(image)
                     .setColor('#0099ff');
         
                 if (!channel) {
