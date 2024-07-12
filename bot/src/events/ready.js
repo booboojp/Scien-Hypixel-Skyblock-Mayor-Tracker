@@ -74,13 +74,90 @@ module.exports = {
             }
         }
         const sendDailyNeko = async () => {
+            const APITags = {
+                "Illustration": 1,
+                "Original Style": 25,
+                "Boy": 52,
+                "Horsegirl": 51,
+                "Blonde hair": 50,
+                "Skirt": 49,
+                "Kissing": 48,
+                "Threesome": 47,
+                "Masturbating": 46,
+                "Futanari": 45,
+                "Anal": 44,
+                "Glasses": 43,
+                "Red hair": 42,
+                "Yuri": 41,
+                "Wet": 40,
+                "Baggy Clothes": 39,
+                "Guitar": 38,
+                "School Uniform": 37,
+                "Usagimimi": 36,
+                "Dress": 35,
+                "Bunny girl": 34,
+                "Tree": 33,
+                "Ice Cream": 32,
+                "Bikini": 31,
+                "Weapon": 30,
+                "Shorts": 29,
+                "Rain": 28,
+                "Sunny": 27,
+                "Brown hair": 26,
+                "Gloves": 24,
+                "Night": 23,
+                "Mountain": 22,
+                "Reading": 21,
+                "Beach": 20,
+                "Maid": 19,
+                "Dick": 16,
+                "Exposed anus": 15,
+                "Exposed girl breasts": 13,
+                "Pink hair": 12,
+                "Blue Hair": 10,
+                "Loli": 9,
+                "White hair": 8,
+                "Catgirl": 7,
+                "Flowers": 5,
+                "Sword": 4,
+                "Sportswear": 2,
+                "Girl": 1,
+                "Pussy": 17,
+                "Large breasts": 53,
+                "Medium Breasts": 54,
+                "Small Breasts": 55,
+                "Flat Chest": 56,
+                "Purple hair": 14,
+                "Plants": 11,
+                "Kemonomimi": 6,
+                "Black hair": 3,
+                "Furry": 57
+            };
+            const keys = Object.keys(APITags);
+            const randomTag = keys[Math.floor(Math.random() * keys.length)];
+            const randomTagID = APITags[randomTag];
+
+
+
+
             const channelID = process.env.SECONDARY_CHANNEL_ID;
             const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID);
+            
+
+
+            const roleID = process.env.ROLE_ID_TO_PING;
+            const role = guild.roles.cache.get(roleID);
+
+
+
+            
+
+
             const channel = guild.channels.cache.get(channelID);
             try {
-                const response = await axios.get('https://api.nekosapi.com/v3/images/random', { params: { limit: 1, tag: 6 } });
+                const response = await axios.get('https://api.nekosapi.com/v3/images/random', { params: { limit: 1, tag: randomTagID } });
                 const data = response.data.items[0].image_url;
-                channel.send({ files: [{ attachment: data }] });
+                channel.send({ content: `Daily Waifu Upload - ${randomTag} | ${role}`, files: [{ attachment: data }] });
             } catch (error) {
                 console.error(error);
             }
