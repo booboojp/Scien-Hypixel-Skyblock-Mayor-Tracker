@@ -9,6 +9,6 @@ As of right now, it is being transformed into a more advanced version of the org
 Here is what I am currently working on for the bot.
 
 - [x] Hook into Hypixel API
-- [] Diffrent Events per Mayor
-- [] Custom Ping Roles
+- [ ] Diffrent Events per Mayor
+- [ ] Custom Ping Roles
 - [ ] Info Command
