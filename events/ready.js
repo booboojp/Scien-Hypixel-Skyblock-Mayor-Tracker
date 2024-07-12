@@ -5,11 +5,11 @@ module.exports = {
 	name: Events.ClientReady,
 	once: false,
 	execute(client) {
-        const channelID = process.env.CHANNEL_ID;
-        const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID);
-        const channel = guild.channels.cache.get(channelID);
         console.log(`${chalk.bold.black.bgMagentaBright('Scienti')}\n${chalk.bold('Status')}: Online\n${chalk.bold('ID')}: ${client.user.id}\n${chalk.bold('Discord Username')}: ${client.user.username}\n${chalk.bold('Avatar URL')}: ${client.user.avatarURL()}\n${chalk.bold('Presence')}: ${client.user.presence.status}\n${chalk.bold('Activity')}: ${JSON.stringify(client.user.presence.activities)}`);
 		const sendDailyMessage = async () => {
+            const channelID = process.env.CHANNEL_ID;
+            const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID);
+            const channel = guild.channels.cache.get(channelID);
             try {
                 const response = await axios.get(`https://api.hypixel.net/v2/resources/skyblock/election?key=${process.env.API_KEY}&uuid=${process.env.MINECRAFT_UUID}`);
     
@@ -73,6 +73,22 @@ module.exports = {
                 console.error(error);
             }
         }
+        const sendDailyNeko = async () => {
+            const channelID = process.env.SECONDARY_CHANNEL_ID;
+            const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID);
+            const channel = guild.channels.cache.get(channelID);
+            try {
+                const response = await axios.get('https://api.nekosapi.com/v3/images/random', { params: { limit: 1, tag: 6 } });
+                const data = response.data.items[0].image_url;
+                channel.send({ files: [{ attachment: data }] });
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        sendDailyNeko()
         setInterval(sendDailyMessage, 10000); // 172800000 = 2 Days, 30000 = 30 Seconds or 3 Seconds
 	},
 };
+
+
+
