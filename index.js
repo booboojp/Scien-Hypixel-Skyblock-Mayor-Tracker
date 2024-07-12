@@ -1,4 +1,4 @@
-const { Client, Collection, Events, GatewayIntentBits  } = require('discord.js');
+const { Client, Collection, Events, EmbedBuilder, GatewayIntentBits  } = require('discord.js');
 const axios = require('axios');
 require('dotenv').config();
 
@@ -9,10 +9,8 @@ const client = new Client({
 
 
 
-
 client.once('ready', () => {
     console.log('The Bot is ready!');
-
 
     const sendDailyMessage = async () => {
         try {
@@ -35,8 +33,15 @@ client.once('ready', () => {
 			}
 
             const mayorPerks = data.mayor && data.mayor.perks ? data.mayor.perks.map(perk => `- **${perk.name}**: ${perk.description}`).join('\n') : '';
-			const replyMessage = `<@386205272005410816>\nElection Year (${data.mayor.election.year}) Data:\n\nMayor: **${data.mayor.name || 'Unknown'}**\nPerks:\n${mayorPerks}\nCandidates:\n${candidatesList}`;
 
+            const embed = new EmbedBuilder()
+                .setTitle(`Election Year (${data.mayor.election.year}) Data:`)
+                .setDescription(`Mayor: **${data.mayor.name || 'Unknown'}**`)
+                .addFields(
+                    { name: 'Perks', value: mayorPerks },
+                    { name: 'Candidates', value: candidatesList }
+                )
+                .setColor('#0099ff');
 	
 			const channelID = process.env.CHANNEL_ID;
             const guild = client.guilds.cache.get(process.env.DISCORD_GUILD_ID);
@@ -46,16 +51,14 @@ client.once('ready', () => {
                 return;
             }
 
-            channel.send(replyMessage);
-
+            channel.send({ content: `<@386205272005410816>`, embeds: [embed] });
 
         } catch (error) {
             console.error(error);
         }
     }
-    setInterval(sendDailyMessage, 172800000);
+    setInterval(sendDailyMessage, 172800000); // 172800000 = 2 Days, 30000 = 30 Seconds or 3 Seconds
 });
-
 
 client.login(process.env.DISCORD_BOT_TOKEN);
 client.on('debug', information => {
