@@ -35,7 +35,8 @@ const client = new Discord.Client({
 
 
 
-client.config
+client.config = require('./config/bot.js');
+console.log(client.config);
 
 
 
