@@ -164,7 +164,7 @@ process.on('unhandledRejection', error => {
         .setTitle(`🚨・Unhandled promise rejection`)
         .addFields([
             {
-                name: "UWU Error",
+                name: "	Error",
                 value: error ? Discord.codeBlock(error) : "No error",
             },
             {
