@@ -148,6 +148,8 @@ module.exports = {
             const roleID = process.env.ROLE_ID_TO_PING;
             const role = guild.roles.cache.get(roleID);
 
+            
+
 
 
             
@@ -159,11 +161,11 @@ module.exports = {
                 const data = response.data.items[0].image_url;
                 channel.send({ content: `Daily Waifu Upload - ${randomTag} | ${role}`, files: [{ attachment: data }] });
             } catch (error) {
-                console.error(error);
+                console.log(error);
             }
         }
-        sendDailyNeko()
-        setInterval(sendDailyMessage, 10000); // 172800000 = 2 Days, 30000 = 30 Seconds or 3 Seconds
+        setInterval(sendDailyNeko, 30000);
+        setInterval(sendDailyMessage, 30000); // 172800000 = 2 Days, 30000 = 30 Seconds or 3 Seconds
 	},
 };
 
