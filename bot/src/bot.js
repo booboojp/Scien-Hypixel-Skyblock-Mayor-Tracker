@@ -91,8 +91,6 @@ for (const file of eventFiles) {
 	}
 }	
 
-client.login(process.env.DISCORD_BOT_TOKEN);
-
 process.on('unhandledRejection', error => {
     console.error('Unhandled promise rejection:', error);
     if (error) if (error.length > 950) error = error.slice(0, 950) + '... view console for details';

@@ -56,6 +56,9 @@ console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), ansis.red(`Ve
 console.log(`\u001b[0m`);
 
 
+const date = new Date();
+const year = date.getFullYear();
+
 
 manager.on('shardCreate', shard => {
     let embed = new Discord.EmbedBuilder()
@@ -74,6 +77,7 @@ manager.on('shardCreate', shard => {
             }
         ])
         .setColor(config.colors.normal)
+		.setFooter({ text: `Current Time: ${new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' })}` });
     startLogs.send({
         username: 'Bot Logs',
         embeds: [embed],
@@ -92,6 +96,7 @@ manager.on('shardCreate', shard => {
                 },
             ])
             .setColor(config.colors.normal)
+			.setFooter({ text: `Current Time: ${new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' })}` });
         shardLogs.send({
             username: 'Bot Logs',
             embeds: [embed]
@@ -111,6 +116,7 @@ manager.on('shardCreate', shard => {
                     }
                 ])
                 .setColor(config.colors.normal)
+				.setFooter({ text: `Current Time: ${new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' })}` });
             shardLogs.send({
                 username: 'Bot Logs',
                 embeds: [embed]
@@ -123,6 +129,7 @@ manager.on('shardCreate', shard => {
             .setTitle(`🚨・Shard ${shard.id + 1}/${manager.totalShards} disconnected`)
             .setDescription("Dumping socket close event...")
             .setColor(config.colors.normal)
+			.setFooter({ text: `Current Time: ${new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' })}` });
         shardLogs.send({
             username: 'Bot Logs',
             embeds: [embed],
@@ -133,6 +140,7 @@ manager.on('shardCreate', shard => {
         const embed = new Discord.EmbedBuilder()
             .setTitle(`🚨・Reconnecting shard ${shard.id + 1}/${manager.totalShards}`)
             .setColor(config.colors.normal)
+			.setFooter({ text: `Current Time: ${new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' })}` });
         shardLogs.send({
             username: 'Bot Logs',
             embeds: [embed],
