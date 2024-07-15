@@ -164,7 +164,7 @@ process.on('unhandledRejection', error => {
         .setTitle(`🚨・Unhandled promise rejection`)
         .addFields([
             {
-                name: "Error",
+                name: "UWU Error",
                 value: error ? Discord.codeBlock(error) : "No error",
             },
             {
@@ -187,7 +187,7 @@ process.on('warning', warn => {
         .setTitle(`🚨・New warning found`)
         .addFields([
             {
-                name: `Warn`,
+                name: `UWU Warn`,
                 value: `\`\`\`${warn}\`\`\``,
             },
         ])
