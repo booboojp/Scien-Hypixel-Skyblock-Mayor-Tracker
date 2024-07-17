@@ -70,7 +70,11 @@
         token: client.webhooks.warnLogs.token,
     });
 
-
+    fs.readdirSync('../src/handlers').forEach((dir) => {
+        fs.readdirSync(`./src/handlers/${dir}`).forEach((handler) => {
+            require(`./handlers/${dir}/${handler}`)(client);
+        });
+    });
 
 
 

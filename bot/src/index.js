@@ -4,7 +4,14 @@ const path = require('path');
 const ansis = require('ansis');
 require('dotenv').config();	
 
-
+console.clear();
+console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), (ansis.green(`Starting up`)), (ansis.white(`...`)))
+console.log(`\u001b[0m`)
+console.log(ansis.red(`© Scienti | 2024 - ${new Date().getFullYear()}`))
+console.log(ansis.red(`All rights reserved`))
+console.log(`\u001b[0m`)
+console.log(`\u001b[0m`)
+console.log(`\u001b[0m`);
 
 
 const webhook = require("./config/webhooks.json");
@@ -43,17 +50,6 @@ const manager = new Discord.ShardingManager('./src/bot.js', {
     timeout: 480000,
 })
 
-
-console.clear();
-console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), (ansis.green(`Starting up`)), (ansis.white(`...`)))
-console.log(`\u001b[0m`)
-console.log(ansis.red(`© Scienti | 2024 - ${new Date().getFullYear()}`))
-console.log(ansis.red(`All rights reserved`))
-console.log(`\u001b[0m`)
-console.log(`\u001b[0m`)
-//console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), ansis.red(`Version`), (ansis.green(`loaded`)))
-console.log(`\u001b[0m`);
-
 manager.on('shardCreate', shard => {
     let embed = new Discord.EmbedBuilder()
         .setTitle(`🆙・Launching shard`)
@@ -76,11 +72,10 @@ manager.on('shardCreate', shard => {
         username: 'Bot Logs',
         embeds: [embed],
     }).then( () => {
-        console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), (ansis.green(`Shard`)), (ansis.magentaBright(`#${shard.id + 1}`)), (ansis.green(`has been launched`)));
+        console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), (ansis.green(`Shard`)), (ansis.magentaBright(`#${shard.id + 1}`)), (ansis.green(`has been started.`)));
+        console.log(`\u001b[0m`);
     }).catch(error => console.log(ansis.redBright(ansis.bold(`Error`)), (ansis.white(`>>`)), (ansis.yellow(ansis.bold(`${error}`)))));
 
-    console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), (ansis.green(`Starting`)), ansis.red(`Shard #${shard.id + 1}`), (ansis.white(`...`)))
-    console.log(`\u001b[0m`);
 
     shard.on("death", (process) => {
         const embed = new Discord.EmbedBuilder()
@@ -96,7 +91,10 @@ manager.on('shardCreate', shard => {
         shardLogs.send({
             username: 'Bot Logs',
             embeds: [embed]
-        });
+        }).then(() => {
+            console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), (ansis.red(`Shard`)), (ansis.magentaBright(`#${shard.id + 1}`)), (ansis.red(`has been closed unexpectedly.`)));
+            console.log(`\u001b[0m`);
+        }).catch(error => console.log(ansis.redBright(ansis.bold(`Error`)), (ansis.white(`>>`)), (ansis.yellow(ansis.bold(`${error}`)))));
 
         if (process.exitCode === null) {
             const embed = new Discord.EmbedBuilder()
@@ -116,7 +114,10 @@ manager.on('shardCreate', shard => {
             shardLogs.send({
                 username: 'Bot Logs',
                 embeds: [embed]
-            });
+            }).then(() => {
+                console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), (ansis.red(`Shard`)), (ansis.magentaBright(`#${shard.id + 1}`)), (ansis.red(`exited with NULL error code!`)));
+                console.log(`\u001b[0m`);
+            }).catch(error => console.log(ansis.redBright(ansis.bold(`Error`)), (ansis.white(`>>`)), (ansis.yellow(ansis.bold(`${error}`)))));
         }
     });
 
@@ -129,7 +130,10 @@ manager.on('shardCreate', shard => {
         shardLogs.send({
             username: 'Bot Logs',
             embeds: [embed],
-        });
+        }).then(() => {
+            console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), (ansis.red(`Shard`)), (ansis.magentaBright(`#${shard.id + 1}`)), (ansis.red(`disconnected.`)));
+            console.log(`\u001b[0m`);
+        }).catch(error => console.log(ansis.redBright(ansis.bold(`Error`)), (ansis.white(`>>`)), (ansis.yellow(ansis.bold(`${error}`)))));
     });
     shard.on('ready', (event) => {
         const embed = new Discord.EmbedBuilder()
@@ -148,7 +152,10 @@ manager.on('shardCreate', shard => {
         shardLogs.send({
             username: 'Bot Logs',
             embeds: [embed],
-        });
+        }).then(() => {
+            console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), (ansis.green(`Shard`)), (ansis.magentaBright(`#${shard.id + 1}`)), (ansis.green(`is ready.`)));
+            console.log(`\u001b[0m`);
+        }).catch(error => console.log(ansis.redBright(ansis.bold(`Error`)), (ansis.white(`>>`)), (ansis.yellow(ansis.bold(`${error}`)))));
     })
 
     shard.on("shardReconnecting", () => {
@@ -159,7 +166,32 @@ manager.on('shardCreate', shard => {
         shardLogs.send({
             username: 'Bot Logs',
             embeds: [embed],
-        });
+        }).then(() => {
+            console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), (ansis.yellow(`Shard`)), (ansis.magentaBright(`#${shard.id + 1}`)), (ansis.yellow(`is reconnecting.`)));
+            console.log(`\u001b[0m`);
+        }).catch(error => console.log(ansis.redBright(ansis.bold(`Error`)), (ansis.white(`>>`)), (ansis.yellow(ansis.bold(`${error}`)))));
+    });
+    shard.on('spawn', () => {
+        const embed = new Discord.EmbedBuilder()
+            .setTitle(`🆕・Shard ${shard.id + 1}/${manager.totalShards} spawned`)
+            .setFields([
+                {
+                    name: "ID",
+                    value: `${shard.id + 1}/${manager.totalShards}`,
+                },
+                {
+                    name: "State",
+                    value: `Spawned`,
+                }
+            ])
+            .setColor(config.colors.normal)
+        shardLogs.send({
+            username: 'Bot Logs',
+            embeds: [embed],
+        }).then(() => {
+            console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), (ansis.green(`Shard`)), (ansis.magentaBright(`#${shard.id + 1}`)), (ansis.green(`is spawned.`)));
+            console.log(`\u001b[0m`);
+        }).catch(error => console.log(ansis.redBright(ansis.bold(`Error`)), (ansis.white(`>>`)), (ansis.yellow(ansis.bold(`${error}`)))));
     });
 });
 
