@@ -21,8 +21,6 @@ if (process.env.WEBHOOK_ID && process.env.WEBHOOK_TOKEN) {
 }
 
 
-
-
 // Initialize Webhooks
 
 const startLogs = new Discord.WebhookClient({
@@ -42,6 +40,7 @@ const manager = new Discord.ShardingManager('./src/bot.js', {
 	totalShards: 'auto',
 	token: process.env.DISCORD_BOT_TOKEN,
 	respawn: true,
+    timeout: 480000,
 })
 
 
@@ -52,13 +51,8 @@ console.log(ansis.red(`© Scienti | 2024 - ${new Date().getFullYear()}`))
 console.log(ansis.red(`All rights reserved`))
 console.log(`\u001b[0m`)
 console.log(`\u001b[0m`)
-console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), ansis.red(`Version`), (ansis.green(`loaded`)))
+//console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), ansis.red(`Version`), (ansis.green(`loaded`)))
 console.log(`\u001b[0m`);
-
-
-const date = new Date();
-const year = date.getFullYear();
-
 
 manager.on('shardCreate', shard => {
     let embed = new Discord.EmbedBuilder()
@@ -81,7 +75,9 @@ manager.on('shardCreate', shard => {
     startLogs.send({
         username: 'Bot Logs',
         embeds: [embed],
-    });
+    }).then( () => {
+        console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), (ansis.green(`Shard`)), (ansis.magentaBright(`#${shard.id + 1}`)), (ansis.green(`has been launched`)));
+    }).catch(error => console.log(ansis.redBright(ansis.bold(`Error`)), (ansis.white(`>>`)), (ansis.yellow(ansis.bold(`${error}`)))));
 
     console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), (ansis.green(`Starting`)), ansis.red(`Shard #${shard.id + 1}`), (ansis.white(`...`)))
     console.log(`\u001b[0m`);
@@ -135,6 +131,25 @@ manager.on('shardCreate', shard => {
             embeds: [embed],
         });
     });
+    shard.on('ready', (event) => {
+        const embed = new Discord.EmbedBuilder()
+            .setTitle(`🆙    ・Shard ${shard.id + 1}/${manager.totalShards} ready`)
+            .setFields([
+                {
+                    name: "ID",
+                    value: `${shard.id + 1}/${manager.totalShards}`,
+                },
+                {
+                    name: "State",
+                    value: `Ready`,
+                }
+            ])
+            .setColor(config.colors.normal);
+        shardLogs.send({
+            username: 'Bot Logs',
+            embeds: [embed],
+        });
+    })
 
     shard.on("shardReconnecting", () => {
         const embed = new Discord.EmbedBuilder()
@@ -149,7 +164,7 @@ manager.on('shardCreate', shard => {
 });
 
 
-manager.spawn();
+manager.spawn({ timeout: 60000 }).catch(e => console.log(e))
 
 
 // Webhooks
