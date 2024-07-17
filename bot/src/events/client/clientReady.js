@@ -6,10 +6,9 @@ require('dotenv').config();
 
 module.exports = async (client) => {
     const startLogs = new Discord.WebhookClient({
-        id: client.startLogs.id,
-        token: client.startLogs.token,
+        id: client.webhooks.startLogs.id,
+        token: client.webhooks.startLogs.token,d
     });
-    console.log('Client Ready command Did something')
+    console.log('Client Ready command Did something! Yay!');
 
-    
 }
