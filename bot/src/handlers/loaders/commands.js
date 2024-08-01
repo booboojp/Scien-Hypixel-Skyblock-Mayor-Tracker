@@ -25,8 +25,31 @@ module.exports = (client) => {
         for (const file of commandFiles) {
             const command = require(`${process.cwd()}/src/interactions/${dirs}/${file}`);
             client.commands.set(command.data.name, command);
-            commands.push(command.data);
-        };
+            
+            try {
+                commands.push(command.data);
+                interactionLogs.send({
+                    username: 'Bot Logs',
+                    embeds: [
+                        new Discord.EmbedBuilder()
+                            .setTitle(`Loaded command: ${command.data.name}`)
+                            .addFields(
+                                { name: 'Name', value: command.data.name },
+                                { name: 'Description', value: command.data.description },
+                                { name: 'Type', value: command.data.type },
+                                { name: 'Category', value: command.data.category }
+                            )
+                            .setColor(client.config.colors.normal.toString())
+                    ]
+                }).then(() => {
+                    console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), (ansis.green(`Command`)), (ansis.magentaBright(`${command.data.name}`)), (ansis.green(`loaded`)));
+                    console.log(`\u001b[0m`);
+                }).catch(error => console.log(ansis.redBright(ansis.bold(`Error`)), (ansis.white(`>>`)), (ansis.yellow(ansis.bold(`${error}`)))));
+            } catch (error) {
+                console.error(`Failed to load command ${command.data.name}: ${error}`);
+            }
+            console.log(`Data: ${JSON.stringify(command.data)}`);
+        } 
     });
 
     const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN);
