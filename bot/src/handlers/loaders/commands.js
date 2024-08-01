@@ -29,20 +29,21 @@ module.exports = (client) => {
         for (const file of commandFiles) {
             const command = require(`${process.cwd()}/src/interactions/${dirs}/${file}`);
             client.commands.set(command.data.name, command);
-            console.log(command.name);
+
             
             try {
                 commands.push(command.data);
+                console.log(command)
+                console.log('Loading Command')
                 interactionLogs.send({
                     username: 'Bot Logs',
                     embeds: [
                         new Discord.EmbedBuilder()
                             .setTitle(`Loaded command: ${command.data.name}`)
                             .addFields(
-                                { name: 'Name', value: command.data.name },
-                                { name: 'Description', value: typeof command.data.description === 'string' ? command.data.description : 'No description provided' },
-                                { name: 'Type', value: command.data.type },
-                                { name: 'Category', value: command.data.category }
+                                { name: 'Name', value: command.data.name ? command.data.name : 'No name provided' },
+                                { name: 'Description', value: command.data.description ? command.data.description : 'No description provided' },
+                                { name: 'NSFW', value: command.data.nsfw ? command.data.nsfw : 'No NSFW status provided' },
                             )
                             .setColor(client.config.colors.normal.toString())
                     ]
@@ -59,7 +60,7 @@ module.exports = (client) => {
     (async () => {
         try {
             const embed = new Discord.EmbedBuilder()
-                .setDescription(`Started refreshing application (/) commands.`)
+                .setDescription(`Started refreshing application (guild) (/) commands.`)
                 .setColor(client.config.colors.normal)
             interactionLogs.send({
                 username: 'Bot Logs',
@@ -67,12 +68,12 @@ module.exports = (client) => {
             });
 
             await rest.put(
-                Routes.applicationCommands(client.config.discord.id),
+                Routes.applicationGuildCommands(client.config.discord.id, process.env.DISCORD_GUILD_ID),
                 { body: commands },
             )
 
             const embedFinal = new Discord.EmbedBuilder()
-                .setDescription(`Successfully reloaded ${commands.length} application (/) commands.`)
+                .setDescription(`Successfully reloaded ${commands.length} application st guild (/) commands.`)
                 .setColor(client.config.colors.normal)
             interactionLogs.send({
                 username: 'Bot Logs',

@@ -75,6 +75,7 @@ module.exports = {
      */
 
     run: async (client, interaction, args) => {
+        console.log('DEBUG: Running Command')
         await interaction.deferReply({ fetchReply: true });
         client.loadSubcommands(client, interaction, args);
     },
