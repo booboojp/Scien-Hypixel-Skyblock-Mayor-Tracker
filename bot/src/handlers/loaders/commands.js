@@ -11,6 +11,10 @@ module.exports = (client) => {
         id: client.webhooks.interactionLogs.id,
         token: client.webhooks.interactionLogs.token,
     });
+    const errorLogs = new Discord.WebhookClient({
+        id: client.webhooks.errorLogs.id,
+        token: client.webhooks.errorLogs.token,
+    });
 
     const commands = [];
 
@@ -25,6 +29,7 @@ module.exports = (client) => {
         for (const file of commandFiles) {
             const command = require(`${process.cwd()}/src/interactions/${dirs}/${file}`);
             client.commands.set(command.data.name, command);
+            console.log(command.name);
             
             try {
                 commands.push(command.data);
@@ -35,7 +40,7 @@ module.exports = (client) => {
                             .setTitle(`Loaded command: ${command.data.name}`)
                             .addFields(
                                 { name: 'Name', value: command.data.name },
-                                { name: 'Description', value: command.data.description },
+                                { name: 'Description', value: typeof command.data.description === 'string' ? command.data.description : 'No description provided' },
                                 { name: 'Type', value: command.data.type },
                                 { name: 'Category', value: command.data.category }
                             )
@@ -45,12 +50,37 @@ module.exports = (client) => {
                     console.log(ansis.blue(ansis.bold(`System`)), (ansis.white(`>>`)), (ansis.green(`Command`)), (ansis.magentaBright(`${command.data.name}`)), (ansis.green(`loaded`)));
                     console.log(`\u001b[0m`);
                 }).catch(error => console.log(ansis.redBright(ansis.bold(`Error`)), (ansis.white(`>>`)), (ansis.yellow(ansis.bold(`${error}`)))));
-            } catch (error) {
-                console.error(`Failed to load command ${command.data.name}: ${error}`);
-            }
-            console.log(`Data: ${JSON.stringify(command.data)}`);
+            }catch (error) {
+                    console.error(`Failed to load command ${command.data.name}:`, error);
+                }
         } 
     });
-
     const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN);
+    (async () => {
+        try {
+            const embed = new Discord.EmbedBuilder()
+                .setDescription(`Started refreshing application (/) commands.`)
+                .setColor(client.config.colors.normal)
+            interactionLogs.send({
+                username: 'Bot Logs',
+                embeds: [embed]
+            });
+
+            await rest.put(
+                Routes.applicationCommands(client.config.discord.id),
+                { body: commands },
+            )
+
+            const embedFinal = new Discord.EmbedBuilder()
+                .setDescription(`Successfully reloaded ${commands.length} application (/) commands.`)
+                .setColor(client.config.colors.normal)
+            interactionLogs.send({
+                username: 'Bot Logs',
+                embeds: [embedFinal]
+            });
+
+        } catch (error) {
+            console.log(error);
+        }
+    })();
 }

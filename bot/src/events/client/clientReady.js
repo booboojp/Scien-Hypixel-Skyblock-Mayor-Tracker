@@ -25,6 +25,5 @@ module.exports = async (client) => {
         console.log('Error sending warning to webhook')
         console.log(warn)
     })
-    console.log('TEST >> Client Ready command Did something! Yay!');
 
 }   
